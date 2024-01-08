@@ -8,22 +8,23 @@
 
 #include <iostream>
 #include <stack>
-#include <set>
-#include <map>
+#include <boost/unordered/unordered_flat_map.hpp>
+#include <boost/unordered/unordered_flat_set.hpp>
 #include <utility>
 #include <string>
+#include <string_view>
 #include <iomanip>
 #include <exception>
 
 
 
 typedef enum { PASS, FAIL } RESULT_t;
-std::map<RESULT_t, std::string> enumText = {{PASS, "PASS"}, {FAIL, "FAIL"}};
+boost::unordered_flat_map<RESULT_t, const char *> enumText = {{PASS, "PASS"}, {FAIL, "FAIL"}};
 
-std::set<char> const opening = { '(', '{', '[' };
-std::map<char, char> const match_brace = { {')', '('}, {'}', '{'}, {']', '['}};
+boost::unordered_flat_set<char> const opening = { '(', '{', '[', '<' };
+boost::unordered_flat_map<char, char> const match_brace = { {')', '('}, {'}', '{'}, {']', '['}, {'>', '<'} };
 
-RESULT_t parse(std::string const &input)
+constexpr RESULT_t parse(std::string_view const &input)
 {
     using std::stack;
     using std::runtime_error;
@@ -31,8 +32,9 @@ RESULT_t parse(std::string const &input)
     
     for (auto c: input){
         auto found_opening = opening.find(c);
-        if (found_opening != opening.cend())
+        if (found_opening != opening.cend()) {
             braces.push(c);
+        }
         else {
             auto found_closing = match_brace.find(c);
             if (found_closing != match_brace.cend()) {
@@ -50,17 +52,17 @@ RESULT_t parse(std::string const &input)
     return PASS;
 }
 
-int main(int argc, const char * argv[]) {
+int main() {
     // insert code here...
-    using std::string;
     using std::cout;
     using std::endl;
     using std::pair;
     using std::make_pair;
 
-    pair<string, RESULT_t> input[] = {
+    constexpr pair<const char *, RESULT_t> input[] = {
         make_pair("(abc)", PASS),
         make_pair("((", FAIL),
+        make_pair(")(", FAIL),
         make_pair("({[]})", PASS),
         make_pair("", PASS),
         make_pair(")", FAIL),
@@ -83,6 +85,9 @@ int main(int argc, const char * argv[]) {
         make_pair("()", PASS),
         make_pair("[]", PASS),
         make_pair("{}", PASS),
+        make_pair("<>", PASS),
+        make_pair("<()>", PASS),
+        make_pair("><", FAIL),
         make_pair("()[]", PASS),
         make_pair("(){}", PASS),
         make_pair("[]{}", PASS),
