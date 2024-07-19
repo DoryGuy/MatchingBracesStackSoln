@@ -53,7 +53,6 @@ constexpr RESULT_t parse(std::string_view const &input)
 }
 
 int main() {
-    // insert code here...
     using std::cout;
     using std::endl;
     using std::pair;
