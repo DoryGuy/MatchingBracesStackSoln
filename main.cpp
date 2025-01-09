@@ -67,6 +67,10 @@ int main() {
         make_pair(")", FAIL),
         make_pair("]", FAIL),
         make_pair("}", FAIL),
+        make_pair("(", FAIL),
+        make_pair("[", FAIL),
+        make_pair("}", FAIL),
+        make_pair("<", FAIL),
         make_pair("({)", FAIL),
         make_pair("(})", FAIL),
         make_pair("([)", FAIL),
@@ -85,6 +89,9 @@ int main() {
         make_pair("[(])", FAIL),
         make_pair("{(})", FAIL),
         make_pair("{[}]", FAIL),
+        make_pair("<(>)", FAIL),
+        make_pair("<[>]", FAIL),
+        make_pair("<{>}", FAIL),
         make_pair("(([))]", FAIL),
         make_pair("{(}", FAIL),
         make_pair("{[}", FAIL),
@@ -100,7 +107,8 @@ int main() {
         make_pair("()[]", PASS),
         make_pair("(){}", PASS),
         make_pair("[]{}", PASS),
-        make_pair("()[]{}", PASS)
+        make_pair("()[]{}", PASS),
+        make_pair("()[]{}<>", PASS)
     };
     for (auto i : input){
         auto result = parse(i.first);
