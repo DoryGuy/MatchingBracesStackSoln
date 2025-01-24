@@ -33,7 +33,7 @@ def parse(input):
                 found_closing = match_brace.get(c)
                 if len(braces) == 0:
                     return FAIL;
-                p = braces[0];
+                p = braces[-1];
                 braces.pop();
                 if (p != found_closing):
                     return FAIL;
@@ -44,7 +44,8 @@ def parse(input):
     return PASS;
 
 def main():
-    input = {
+    input = (
+        ("([])", PASS),
         ("(abc)", PASS),
         ("((", FAIL),
         (")(", FAIL),
@@ -95,7 +96,7 @@ def main():
         ("[]{}", PASS),
         ("()[]{}", PASS),
         ("()[]{}<>", PASS)
-    }
+    )
 
     for i in input:
         result = parse(i[0])
